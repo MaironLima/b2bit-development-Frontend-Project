@@ -1,0 +1,187 @@
+@import "@fontsource/poppins/index.css";
+@import "@fontsource/poppins/300.css"; 
+
+@reference "tailwindcss";
+
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@layer base {
+    :root {
+        --background: #fafafa;
+        --title: #0c92f2;
+        --subtitle: #63758f;
+        --auth-unactived: #8795a8;
+        --auth-actived: #0c92f2;
+        --terms: #405c7a;
+        --border-color: #c8cfd8;
+        --outline: #cbdbec;
+        --icons: #8a98ab;
+        --btn-background: #0d93f2;
+        --btn-background-alt: #fafafa;
+        --btn-hover-background-alt: #dce3ee;
+        --btn-text: #fafafa;
+        --btn-text-alt: #8795a8;
+        --main-btn-background: #0d93f2;
+        --main-btn-text: #fafafa;
+        --input-placeholder: #8a98ab;
+        --input-background: #ffffff;
+        --card-background: #ffffff;
+        --card-title: #324259;
+        --card-subtitle: #324259;
+        --card-extra: #8a98ab;
+        --card-border: #e1e8f0;
+        --post-line: #e1e8f0;
+        --extra: #8a98ab;
+        --like-unactived: #91a2ba;
+    }
+
+    .dark {
+        --background: #0a101c;
+        --title: #fafafa;
+        --subtitle: #cad4e0;
+        --terms: #717e91;
+        --auth-unactived: #91a2ba;
+        --auth-actived: #fafafa;
+        --border-color: #63758f;
+        --outline: #2f3d50;
+        --icons: #8f97a6;
+        --input-placeholder: #63758f;
+        --input-background: #1d293d;
+        --btn-background: #0d93f2;
+        --btn-background-alt: #0d1528;
+        --btn-hover-background-alt: #1b202c;
+        --btn-text: #fafafa;
+        --btn-text-alt: #fafafa;
+        --main-btn-text: #fafafa;
+        --main-btn-background: #1d2a3d;
+        --card-background: #1d293d;
+        --card-title: #ffffff;
+        --card-subtitle: #cbd5e1;
+        --card-extra: #6e767d;
+        --card-border: #e1e8f0;
+        --post-line: #314057;
+        --extra: #fafafa;
+        --like-unactived: #91a2ba;
+
+    }
+
+    body {
+        @apply bg-[var(--background)];
+        font-family: 'Poppins';
+    }
+}
+
+@layer components {
+    .global-title {
+        @apply text-[var(--title)] text-3xl font-bold tracking-wider;
+    }
+
+    .global-subtitle {
+        @apply text-[var(--subtitle)] text-base;
+    }
+
+    .global-extra {
+        @apply text-[var(--extra)] text-sm font-normal;
+    }
+
+    .global-border {
+        @apply border-b-[var(--border-color)] ;
+    }
+
+    .global-alternative-border {
+        @apply border-[var(--border-color)] ;
+    }
+
+    .global-tansaction-border {
+        @apply border-b-[var(--border-color)]  bg-[#0c92f2] absolute bottom-0 h-1 w-32 transition-all ;
+    }
+
+    .global-btn {
+        @apply cursor-pointer bg-[var(--btn-background)] text-[var(--btn-text)] font-semibold rounded-full shadow-lg text-center outline-0 border-0 hover:bg-[#0486e4] transition-all duration-400;
+    }
+
+    .global-alternative-btn {
+        @apply cursor-pointer bg-[var(--btn-background-alt)] text-[var(--btn-text-alt)]  rounded-full shadow-lg text-center outline-0 border-0 hover:bg-[var(--btn-hover-background-alt)] transition-all duration-400;
+    }
+
+    .global-main-btn {
+        @apply cursor-pointer bg-[var(--main-btn-background)] text-[var(--main-btn-text)] rounded-full outline-0 border-0 flex items-center justify-center p-0 shrink-0 hover:bg-[#0486e4] transition-all duration-400;
+    }
+
+    .global-btn-blur {
+        @apply  pointer-events-none absolute inset-0 bg-[var(--btn-background)] blur-xl opacity-40 rounded-full hover:opacity-60;
+    }
+
+    .global-input {
+        @apply cursor-pointer mt-1 px-2 py-5 pr-20 mx-auto w-80 rounded-xl text-[15px] text-left text-[var(--input-placeholder)] placeholder-[var(--input-placeholder)] bg-[var(--input-background)] border border-[var(--border-color)] outline-0 focus:outline-1 focus:outline-[var(--outline)];
+    }
+
+    .global-input-placeholder {
+        @apply text-[var(--card-title)];
+    }
+
+    .global-icon {
+        @apply text-[var(--icons)] bg-transparent border-none shadow-none absolute right-3 top-8 transform -translate-y-1/2;
+    }
+
+    .global-card {
+        @apply bg-[var(--card-background)] w-full max-w-2xl mx-auto rounded-2xl border p-5 shadow-xl;
+    }
+
+    .global-card-title {
+        @apply text-[var(--card-title)];
+    }
+    .global-card-title-placeholder {
+        @apply placeholder-[var(--card-title)];
+    }
+    
+    .global-card-subtitle {
+        @apply text-[var(--card-subtitle)] font-light;
+    }
+
+    .global-card-extra {
+        @apply text-[var(--card-extra)] text-sm ;
+    }
+
+    .global-auth-active {
+        @apply cursor-pointer border-b-3 border-0 border-b-[#0c92f2] text-[var(--auth-actived)] bg-transparent text-base font-semibold px-2 py-1 w-50 shadow-none outline-none p-0 m-0 tracking-wide pb-3;
+    }
+    
+    .global-auth-unactive {
+        @apply cursor-pointer text-[var(--auth-unactived)] bg-transparent text-base font-semibold px-2 py-1 w-50 shadow-none border-none outline-none p-0 m-0 tracking-wide pb-3;
+    }
+
+    .global-post-icon {
+        @apply cursor-pointer text-[#0c92f2] hover:text-[#007ed8] bg-[var(--card-background)] outline-none border-none;
+    }
+
+    .global-like {
+        @apply bg-[var(--card-background)] cursor-pointer text-[#eb5757]  outline-none border-none transition-colors duration-300;
+    }
+
+    .global-like-unactived {
+        @apply bg-[var(--card-background)] cursor-pointer text-[var(--like-unactived)] outline-none border-none;
+    }
+
+    .global-post-line {
+        @apply bg-[var(--post-line)];
+    }
+
+    .global-header-bg {
+        @apply bg-[var(--background)];
+    }
+    
+    .global-header-bg {
+        @apply bg-[var(--background)];
+    }
+
+    .placeholder-word-spacing-tight::placeholder {
+    word-spacing: -5px;
+}
+}
