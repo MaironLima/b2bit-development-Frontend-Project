@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ImageUp } from "lucide-react";
 import Posts from "../components/Posts";
@@ -15,9 +15,8 @@ type FormData = {
 function MainPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [posts, setPosts] = useState([]);
   const [postError, setPostError] = useState<string | null>(null);
-  const { accessToken, update } = useStore();
+  const { accessToken, setUpdate } = useStore();
 
   const {
     register,
@@ -30,22 +29,6 @@ function MainPage() {
   function handleClick() {
     fileInputRef.current?.click();
   }
-
-  const { mutate: fetchPosts } = useMutation({
-    mutationFn: async () => {
-      const props = await api.get("/posts");
-      return props.data;
-    },
-    onSuccess: (data) => {
-      setPosts(data.posts);
-    },
-  });
-
-  useEffect(() => {
-    fetchPosts();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken, update]);
 
   const { mutate: sendPost } = useMutation({
     mutationFn: async (data: {
@@ -61,7 +44,7 @@ function MainPage() {
       return response.data;
     },
     onSuccess: () => {
-      fetchPosts();
+      setUpdate();
     },
   });
 
@@ -180,7 +163,7 @@ function MainPage() {
         </div>
       </form>
 
-      <Posts posts={posts} />
+      <Posts />
     </div>
   );
 }

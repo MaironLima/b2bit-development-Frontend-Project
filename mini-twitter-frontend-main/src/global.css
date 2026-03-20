@@ -162,7 +162,7 @@ html, body {
     }
 
     .global-like {
-        @apply bg-[var(--card-background)] cursor-pointer text-[#eb5757]  outline-none border-none transition-colors duration-300;
+        @apply bg-[var(--card-background)] cursor-pointer text-[#eb5757]  outline-none border-none;
     }
 
     .global-like-unactived {

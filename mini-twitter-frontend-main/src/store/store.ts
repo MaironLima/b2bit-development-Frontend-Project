@@ -5,6 +5,12 @@ type Theme = "dark" | "light";
 const getInitialTheme = (): Theme =>
   (localStorage.getItem("theme") as Theme) === "dark" ? "dark" : "light";
 
+const getInitialAccessToken = (): string =>
+  localStorage.getItem("accessToken") || "";
+
+const getInitialId = (): number =>
+  Number(localStorage.getItem("id")) || -1;
+
 interface TokenState {
   themeStore: Theme;
   setThemeStore: (theme: Theme) => void;
@@ -19,6 +25,9 @@ interface TokenState {
 
   update: boolean;
   setUpdate: () => void;
+
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
 }
 
 export const useStore = create<TokenState>((set) => ({
@@ -29,14 +38,23 @@ export const useStore = create<TokenState>((set) => ({
     set({ themeStore: newTheme });
   },
 
-  accessToken: "",
-  setAccessToken: (token) => set({ accessToken: token }),
+  accessToken: getInitialAccessToken(),
+  setAccessToken: (token) => {
+    set({ accessToken: token })
+    localStorage.setItem('accessToken', token)
+  },
   deleteAccessToken: () => set({ accessToken: "" }),
 
-  currentId: -1,
-  setCurrentId: (id) => set({ currentId: id }),
-  deleteCurrentId: () => set({ currentId: -1 }),
+  currentId: getInitialId(),
+  setCurrentId: (id) => {
+    set({ currentId: id })
+    localStorage.setItem('id', `${id}`)
+  },
+  deleteCurrentId: () => {set({ currentId: -1 })},
 
   update: false,
   setUpdate: () => set((state) => ({ update: !state.update })),
+
+searchTerm: "",
+setSearchTerm: (term: string) => set({ searchTerm: term }),
 }));

@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Header() {
-  const { accessToken, deleteAccessToken, deleteCurrentId } = useStore();
+  const { accessToken, deleteAccessToken, deleteCurrentId, setSearchTerm } =
+    useStore();
   const auth = accessToken !== "";
 
   const navigate = useNavigate();
@@ -26,18 +27,19 @@ function Header() {
     onSuccess: () => {
       deleteAccessToken();
       deleteCurrentId();
-      window.dispatchEvent(new Event("refetch-posts"));
     },
     onError: (err: { response?: { status?: number } }) => {
       if (err?.response?.status === 401) {
         deleteAccessToken();
-        window.dispatchEvent(new Event("refetch-posts"));
+        deleteCurrentId();
       }
     },
   });
 
   function onLogout() {
     sendLogout();
+
+    localStorage.clear()
   }
 
   function toAuth(register: boolean) {
@@ -62,6 +64,7 @@ function Header() {
             className="global-input flex-none px-0 py-0 pl-10 pr-0 mt-0 mb-0 ml-0 mr-0 w-[300px] h-9 text-left rounded-xl"
             placeholder="Buscar por post..."
             type="text"
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>

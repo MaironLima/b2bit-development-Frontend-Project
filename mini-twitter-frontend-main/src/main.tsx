@@ -5,7 +5,7 @@ import queryClient from './services/queryClient.ts'
 import { router } from './routes/routes.tsx'
 import { RouterProvider } from 'react-router-dom'
 import './global.css'
-import { ThemeProvider } from './components/ThemeProvider2.tsx'
+import { ThemeProvider } from './components/ThemeProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
