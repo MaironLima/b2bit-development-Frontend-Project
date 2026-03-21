@@ -1,3 +1,3 @@
-Para uma experiência de usuario, rode 'npm run dev' ou 'bun run dev' em cada pasta principal (um terminal para back-end e um para front-end)
+For a user experience, use 'npm run dev' or 'bun run dev' in the two main folders (one terminal for back-end and other for front-end para back-end)
 
 main-url: http://localhost:5173/
