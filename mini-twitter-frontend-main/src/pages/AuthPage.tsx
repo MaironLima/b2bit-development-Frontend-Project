@@ -141,7 +141,9 @@ function AuthPage() {
 
             <div className="mt-8">
               <form
-                onSubmit={handleSubmit((data) => sendLogin({ email: data.email, password: data.password }))}
+                onSubmit={handleSubmit((data) =>
+                  sendLogin({ email: data.email, password: data.password }),
+                )}
               >
                 <div className="flex flex-col gap-4">
                   <label className="global-extra flex flex-col">
@@ -191,7 +193,7 @@ function AuthPage() {
                   </label>
                 </div>
 
-                <div className="flex justify-center mt-10">
+                <div className="flex justify-center mt-10 flex-col items-center">
                   <div className="relative w-fit">
                     <div className="global-btn-blur px-20 py-2 inset-0"></div>
                     <button
@@ -201,6 +203,11 @@ function AuthPage() {
                       Continuar
                     </button>
                   </div>
+                  {errorMessage && (
+                    <span className="text-red-500 text-xs mt-1 self-center">
+                      <span className="font-semibold">{errorMessage}</span>
+                    </span>
+                  )}
                 </div>
               </form>
             </div>
@@ -295,7 +302,7 @@ function AuthPage() {
                   </label>
                 </div>
 
-                <div className="flex justify-center mt-10">
+                <div className="flex flex-col justify-center items-center mt-10">
                   <div className="relative w-fit">
                     <button
                       className="global-btn px-41 py-5 text-[17px] font-semibold"
@@ -304,6 +311,11 @@ function AuthPage() {
                       Continuar
                     </button>
                   </div>
+                  {errorMessage && (
+                    <span className="text-red-500 text-xs mt-1 self-center">
+                      <span className="font-semibold">{errorMessage}</span>
+                    </span>
+                  )}
                 </div>
               </form>
             </div>
@@ -325,12 +337,6 @@ function AuthPage() {
           </p>
         </div>
       </div>
-
-      {errorMessage && (
-        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-md shadow-xl z-50 flex items-center gap-2">
-          <span className="font-semibold">{errorMessage}</span>
-        </div>
-      )}
     </div>
   );
 }

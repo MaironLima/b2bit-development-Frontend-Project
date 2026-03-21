@@ -1,17 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import {
-  Heart,
-  HeartPlus,
-  HeartMinus,
   Pencil,
   Trash2,
   ImageUp,
 } from "lucide-react";
 import api from "../services/api";
 import { useStore } from "../store/store";
+import Like from "./Like";
 
-type Post = {
+export type Post = {
   id: number;
   title: string;
   content: string;
@@ -23,9 +21,6 @@ type Post = {
 };
 
 function Posts() {
-  const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({});
-  const [likesCount, setLikesCount] = useState<{ [key: number]: number }>({});
-  const [likeErrorPostId, setLikeErrorPostId] = useState<number | null>(null);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<{
     title: string;
@@ -47,27 +42,6 @@ function Posts() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentId, accessToken]);
-
-  const { mutate: likeMutation } = useMutation({
-    mutationFn: async (postId: number) => {
-      const response = await api.post(
-        `/posts/${postId}/like`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      );
-      return response.data;
-    },
-    onSuccess: (data, postId) => {
-      setLikedPosts((prev) => ({
-        ...prev,
-        [postId]: data.liked,
-      }));
-    },
-  });
 
   const { mutate: deletePost } = useMutation({
     mutationFn: async (postId: number) => {
@@ -145,31 +119,13 @@ const lastPostRef = useCallback(
   },
   [isFetchingNextPage, hasNextPage, fetchNextPage]
 );
+
 useEffect(() => {
   refetch();
 }, [update, refetch]);
 
   function onDelete(postId: number) {
     deletePost(postId);
-  }
-
-  function handleLike(postId: number, initialLikesCount: number) {
-    if (!accessToken) {
-      setLikeErrorPostId(postId);
-      return;
-    }
-
-    setLikeErrorPostId(null);
-
-    const isCurrentlyLiked = likedPosts[postId] || false;
-
-    setLikesCount((prev) => ({
-      ...prev,
-      [postId]:
-        (prev[postId] ?? initialLikesCount) + (isCurrentlyLiked ? -1 : 1),
-    }));
-
-    likeMutation(postId);
   }
 
   function startEdit(post: Post) {
@@ -366,59 +322,7 @@ const sortedPosts = (data?.pages.flatMap(p => p.posts) ?? [])
           )}
 
           {!(currentId !== -1 && editingPostId === post.id) && (
-            <div className="bg-none mb-0 mt-4 flex items-center gap-2">
-              <button
-                className={
-                  currentId === post.authorId
-                    ? "global-like mb-0 pointer-events-none"
-                    : likedPosts[post.id]
-                      ? "global-like mb-0 group"
-                      : "global-like-unactived mb-0 group"
-                }
-                onClick={
-                  currentId === post.authorId
-                    ? undefined
-                    : () => handleLike(post.id, post.likesCount)
-                }
-                tabIndex={currentId === post.authorId ? -1 : 0}
-                aria-disabled={currentId === post.authorId}
-              >
-                <span className="block group-hover:hidden">
-                  <Heart />
-                </span>
-                {currentId === post.authorId ? (
-                  <span className="hidden group-hover:block">
-                    <HeartMinus />
-                  </span>
-                ) : !likedPosts[post.id] ? (
-                  <span className="hidden group-hover:block">
-                    <HeartPlus />
-                  </span>
-                ) : (
-                  <span className="hidden group-hover:block">
-                    <HeartMinus />
-                  </span>
-                )}
-              </button>
-              <span
-                className={
-                  (currentId === post.authorId
-                    ? "pointer-events-none "
-                    : "") +
-                  (currentId === post.authorId || likedPosts[post.id]
-                    ? "global-like mb-0 -translate-x-2 -translate-y-px"
-                    : "global-like-unactived mb-0 -translate-x-2 -translate-y-px")
-                }
-              >
-                {likesCount[post.id] ?? post.likesCount}
-              </span>
-            </div>
-          )}
-
-          {likeErrorPostId === post.id && (
-            <p className="text-red-500 text-sm mt-2 ml-1">
-              Você precisa estar logado para curtir.
-            </p>
+            <Like post={post} />
           )}
         </div>
       );

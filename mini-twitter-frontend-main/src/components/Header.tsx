@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Header() {
-  const { accessToken, deleteAccessToken, deleteCurrentId, setSearchTerm } =
-    useStore();
+  const { accessToken, setSearchTerm, clearAuth, setUpdate } = useStore();
   const auth = accessToken !== "";
 
   const navigate = useNavigate();
@@ -25,21 +24,16 @@ function Header() {
       );
     },
     onSuccess: () => {
-      deleteAccessToken();
-      deleteCurrentId();
+      clearAuth()
+      setUpdate()
     },
     onError: (err: { response?: { status?: number } }) => {
-      if (err?.response?.status === 401) {
-        deleteAccessToken();
-        deleteCurrentId();
-      }
+      if (err?.response?.status === 401) clearAuth();
     },
   });
 
   function onLogout() {
     sendLogout();
-
-    localStorage.clear()
   }
 
   function toAuth(register: boolean) {
