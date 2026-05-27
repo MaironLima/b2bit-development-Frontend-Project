@@ -10,34 +10,100 @@ db.run("DELETE FROM sqlite_sequence WHERE name IN ('users', 'posts', 'likes')");
 
 // Criar usuários
 const users = [
-  { name: "Alice Silva", email: "alice@example.com", password: "password123" },
-  { name: "Bob Santos", email: "bob@example.com", password: "password123" },
-  { name: "Charlie Oliveira", email: "charlie@example.com", password: "password123" },
+  {
+    name: "Mairon Lima",
+    email: "maironlmelo@gmail.com",
+    password: "password123",
+  },
+  {
+    name: "Maria Eduarda",
+    email: "mariaeduarda@example.com",
+    password: "password123",
+  },
+  {
+    name: "Rafael Borges",
+    email: "rafaelborges@example.com",
+    password: "password123",
+  },
 ];
 
-const insertUser = db.prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING id");
-const userIds = users.map(u => (insertUser.get(u.name, u.email, u.password) as any).id);
+const insertUser = db.prepare(
+  "INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING id",
+);
+const userIds = users.map(
+  (u) => (insertUser.get(u.name, u.email, u.password) as any).id,
+);
 
 console.log(`✅ ${userIds.length} usuários criados.`);
 
 // Criar posts
 const posts = [
-  { title: "Meu primeiro post", content: "Olá mundo! Este é o meu primeiro tweet no Mini Twitter.", authorId: userIds[0] },
-  { title: "ElysiaJS é incrível", content: "Estou adorando construir APIs com Bun e ElysiaJS. É muito rápido!", authorId: userIds[0] },
-  { title: "Dica de Bun", content: "Você sabia que o Bun tem um SQLite nativo super veloz?", authorId: userIds[1] },
-  { title: "Frontend Moderno", content: "Uma API bem estruturada facilita muito a vida de quem desenvolve o front.", authorId: userIds[2] },
-  { title: "TypeScript em todo lugar", content: "Segurança de tipos é essencial para projetos escaláveis.", authorId: userIds[2] },
-  { title: "Café e Código", content: "Nada como um bom café para começar o dia programando.", authorId: userIds[1] },
-  { title: "Deploy Simples", content: "Com Bun, o deploy de aplicações backend ficou muito mais direto.", authorId: userIds[0] },
+  {
+    title: "Espero que goste!",
+    content:
+      "Obrigado pela atenção.",
+    image: "Gemini_Generated_Image_4f4fld4f4fld4f4f.png",
+    authorId: userIds[0],
+  },
+  {
+    title: "Teste contas já existentes também!",
+    content:
+      "login: maironlmelo@gmail.com | senha: password123\nlogin: mariaeduarda@example.com | senha: password123\nlogin: rafaelborges@example.com | senha: password123",
+    authorId: userIds[0],
+  },
+  {
+    title: "Fim de tarde na praia",
+    content:
+      "Nada melhor do que assistir o pôr do sol depois de um dia cansativo.",
+    authorId: userIds[0],
+  },
+  {
+    title: "Filme do final de semana",
+    content:
+      "Assisti um filme de suspense ontem e o final me pegou completamente de surpresa.",
+    authorId: userIds[1],
+  },
+  {
+    title: "Café da manhã perfeito",
+    content:
+      "Pão quentinho, café e frutas fazem qualquer manhã começar melhor.",
+    authorId: userIds[2],
+  },
+  {
+    title: "Vontade de viajar",
+    content: "Tenho muita vontade de conhecer o Japão algum dia.",
+    authorId: userIds[0],
+  },
+  {
+    title: "Treino concluído",
+    content:
+      "Hoje consegui bater meu recorde na academia. Pequenos avanços importam.",
+    authorId: userIds[2],
+  },
+  {
+    title: "Música favorita da semana",
+    content:
+      "Descobri uma banda nova e não consigo parar de ouvir as músicas deles.",
+    authorId: userIds[1],
+  },
+  {
+    title: "Chuva boa",
+    content: "A melhor sensação é ouvir chuva forte enquanto descanso em casa.",
+    authorId: userIds[0],
+  },
 ];
 
-const insertPost = db.prepare("INSERT INTO posts (title, content, authorId) VALUES (?, ?, ?)");
-posts.forEach(p => insertPost.run(p.title, p.content, p.authorId));
+const insertPost = db.prepare(
+  "INSERT INTO posts (title, content, image, authorId) VALUES (?, ?, ?, ?)",
+);
+posts.forEach((p) => insertPost.run(p.title, p.content, p.image ?? null, p.authorId));
 
 console.log(`✅ ${posts.length} posts criados.`);
 
 // Criar alguns likes aleatórios
-const insertLike = db.prepare("INSERT INTO likes (postId, userId) VALUES (?, ?)");
+const insertLike = db.prepare(
+  "INSERT INTO likes (postId, userId) VALUES (?, ?)",
+);
 const allPosts = db.prepare("SELECT id FROM posts").all() as any[];
 
 allPosts.forEach((post, index) => {

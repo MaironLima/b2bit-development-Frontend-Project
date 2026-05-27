@@ -258,7 +258,7 @@ const sortedPosts = (data?.pages.flatMap(p => p.posts) ?? [])
                 value={editForm.content}
                 onChange={handleEditChange}
                 rows={3}
-                className="w-full bg-transparent global-card-subtitle global-input-placeholder text-lg resize-none outline-none border-none placeholder-word-spacing-tight"
+                className="w-full bg-transparent global-card-subtitle global-input-placeholder text-lg resize-none outline-none border-none placeholder-word-spacing-tight whitespace-pre-wrap"
                 placeholder="E aí, o que está rolando?"
                 required
               />
@@ -300,7 +300,7 @@ const sortedPosts = (data?.pages.flatMap(p => p.posts) ?? [])
                 <h3 className="global-card-title tracking-wider mb-1 mt-0">
                   {post.title}
                 </h3>
-                <h4 className="global-card-subtitle mt-0">{post.content}</h4>
+                <p className="global-card-subtitle mt-0 whitespace-pre-wrap">{post.content}</p>
               </div>
               <div className="flex justify-center w-full">
                 {post.image && (
