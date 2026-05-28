@@ -8,7 +8,7 @@ async function main() {
   // Limpar dados existentes
   await db.query("TRUNCATE TABLE users, posts, likes, tokens_blacklist RESTART IDENTITY CASCADE;");
 
-  // Criar usuários
+  // Criar usuï¿½rios
   const users = [
     {
       name: "Mairon Lima",
@@ -36,78 +36,78 @@ async function main() {
     userIds.push(res.rows[0].id);
   }
 
-  console.log(`? ${userIds.length} usuários criados.`);
+  console.log(`? ${userIds.length} usuÃ¡rios criados.`);
 
   // Criar posts
   const posts = [
     {
-      title: "Espero que goste!",
+      title: "Filme do final de semana",
       content:
-        "Obrigado pela atenção.",
-      image: "Gemini_Generated_Image_4f4fld4f4fld4f4f.png",
+      "Assisti um filme de suspense ontem e o final me pegou completamente de surpresa.",
+      authorId: userIds[1],
+    },
+    {
+      title: "CafÃ© da manhÃ£ perfeito",
+      content:
+      "PÃ£o quentinho, cafÃ©e frutas fazem qualquer manhÃ£ comeÃ§ar melhor.",
+      authorId: userIds[2],
+    },
+    {
+      title: "Vontade de viajar",
+      content: "Tenho muita vontade de conhecer o JapÃ£o algum dia.",
       authorId: userIds[0],
     },
     {
-      title: "Teste contas já existentes também!",
+      title: "Treino concluido",
       content:
-        "login: maironlmelo@gmail.com | senha: password123\nlogin: mariaeduarda@example.com | senha: password123\nlogin: rafaelborges@example.com | senha: password123",
+      "Hoje consegui bater meu recorde na academia. Pequenos avanÃ§os importam.",
+      authorId: userIds[2],
+    },
+    {
+      title: "MÃºsica favorita da semana",
+      content:
+      "Descobri uma banda nova e nÃ£o consigo parar de ouvir as mÃºsicas deles.",
+      authorId: userIds[1],
+    },
+    {
+      title: "Chuva boa",
+      content: "A melhor sensaÃ§Ã£o Ã© ouvir chuva forte enquanto descanso em casa.",
       authorId: userIds[0],
     },
     {
       title: "Fim de tarde na praia",
       content:
-        "Nada melhor do que assistir o pôr do sol depois de um dia cansativo.",
+      "Nada melhor do que assistir o por do sol depois de um dia cansativo.",
       authorId: userIds[0],
     },
     {
-      title: "Filme do final de semana",
+      title: "Teste contas jÃ¡ existentes tambÃ©m!",
       content:
-        "Assisti um filme de suspense ontem e o final me pegou completamente de surpresa.",
-      authorId: userIds[1],
-    },
-    {
-      title: "Café da manhã perfeito",
-      content:
-        "Pão quentinho, café e frutas fazem qualquer manhã começar melhor.",
-      authorId: userIds[2],
-    },
-    {
-      title: "Vontade de viajar",
-      content: "Tenho muita vontade de conhecer o Japão algum dia.",
+      "login: maironlmelo@gmail.com | senha: password123\nlogin: mariaeduarda@example.com | senha: password123\nlogin: rafaelborges@example.com | senha: password123",
       authorId: userIds[0],
     },
     {
-      title: "Treino concluído",
+      title: "Espero que goste!",
       content:
-        "Hoje consegui bater meu recorde na academia. Pequenos avanços importam.",
-      authorId: userIds[2],
-    },
-    {
-      title: "Música favorita da semana",
-      content:
-        "Descobri uma banda nova e não consigo parar de ouvir as músicas deles.",
-      authorId: userIds[1],
-    },
-    {
-      title: "Chuva boa",
-      content: "A melhor sensação é ouvir chuva forte enquanto descanso em casa.",
+        "Obrigado pela atenÃ§Ã£o.",
+      image: "Gemini_Generated_Image_4f4fld4f4fld4f4f.png",
       authorId: userIds[0],
     },
   ];
-
+  
   for (const p of posts) {
     await db.query(
       "INSERT INTO posts (title, content, image, \"authorId\") VALUES ($1, $2, $3, $4)",
       [p.title, p.content, p.image ?? null, p.authorId]
     );
   }
-
+  
   console.log(`? ${posts.length} posts criados.`);
-
-  // Criar alguns likes aleatórios
+  
+  // Criar alguns likes aleatï¿½rios
   const postsRes = await db.query("SELECT id FROM posts");
   const allPosts = postsRes.rows;
-
+  
   for (let index = 0; index < allPosts.length; index++) {
     const post = allPosts[index];
     if (index % 2 === 0) await db.query("INSERT INTO likes (\"postId\", \"userId\") VALUES ($1, $2)", [post.id, userIds[0]]);
