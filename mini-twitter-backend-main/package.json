@@ -6,7 +6,7 @@
     "start": "bun run src/index.ts",
     "dev": "bun run --watch src/index.ts",
     "seed": "bun run seed.ts",
-    "build": "bun run seed.ts && bun run build:real"
+    "build:real": "bun run seed.ts && bun run build:real"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
