@@ -4,6 +4,10 @@ import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
 import { authRoutes } from "./routes/auth.routes";
 import { postRoutes } from "./routes/post.routes";
+import { initDb } from "./db";
+
+// Iniciar conexão com banco de dados
+await initDb();
 
 const app = new Elysia()
   .use(swagger({

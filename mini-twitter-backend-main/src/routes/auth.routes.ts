@@ -13,7 +13,7 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
     "/register",
     async ({ body, set }) => {
       try {
-        const user = AuthService.register(body.name, body.email, body.password);
+        const user = await AuthService.register(body.name, body.email, body.password);
         set.status = 201;
         return user;
       } catch (e) {
@@ -33,7 +33,7 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
   .post(
     "/login",
     async ({ body, jwt, set }) => {
-      const user = AuthService.login(body.email, body.password);
+      const user = await AuthService.login(body.email, body.password);
 
       if (!user) {
         set.status = 401;
@@ -74,7 +74,7 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
       const payload = await jwt.verify(token);
 
       if (payload && typeof payload.exp === 'number') {
-        AuthService.blacklistToken(token, payload.exp);
+        await AuthService.blacklistToken(token, payload.exp);
       }
 
       return { success: true, message: "Logout realizado com sucesso. Token invalidado." };

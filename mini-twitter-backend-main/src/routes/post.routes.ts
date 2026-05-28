@@ -11,10 +11,10 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
   )
   .get(
     "/",
-    ({ query }) => {
+    async ({ query }) => {
       const page = query.page ? parseInt(query.page as string) : 1;
       const search = query.search as string | undefined;
-      return PostService.getAll(page, 10, search);
+      return await PostService.getAll(page, 10, search);
     },
     {
       query: t.Object({
@@ -29,21 +29,21 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
       async beforeHandle({ jwt, set, headers: { authorization } }) {
         if (!authorization) {
           set.status = 401;
-          return { error: "N√£o autorizado: Token n√£o fornecido" };
+          return { error: "N„o autorizado: Token n„o fornecido" };
         }
         const token = authorization.split(" ")[1];
 
         // Verificar Blacklist
         const { AuthService } = await import("../services/auth.service");
-        if (AuthService.isTokenBlacklisted(token)) {
+        if (await AuthService.isTokenBlacklisted(token)) {
           set.status = 401;
-          return { error: "N√£o autorizado: Este token foi invalidado (logout realizado)" };
+          return { error: "N„o autorizado: Este token foi invalidado (logout realizado)" };
         }
 
         const payload = await jwt.verify(token);
         if (!payload) {
           set.status = 401;
-          return { error: "N√£o autorizado: Token inv√°lido ou expirado" };
+          return { error: "N„o autorizado: Token inv·lido ou expirado" };
         }
       },
     },
@@ -55,13 +55,12 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
             const token = authorization!.split(" ")[1];
             const payload = (await jwt.verify(token)) as any;
 
-            // Valida√ß√£o simples de tamanho de imagem (base64 ou URL)
             if (body.image && body.image.length > 5 * 1024 * 1024) {
               set.status = 400;
               return { error: "Imagem muito grande: Limite de 5MB" };
             }
 
-            return PostService.create(body.title, body.content, payload.sub, body.image);
+            return await PostService.create(body.title, body.content, payload.sub, body.image);
           },
           {
             body: t.Object({
@@ -79,16 +78,16 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
             const payload = (await jwt.verify(token)) as any;
             const userId = payload.sub;
 
-            const post = PostService.getById(id);
+            const post = await PostService.getById(id);
 
             if (!post) {
               set.status = 404;
-              return { error: "Post n√£o encontrado" };
+              return { error: "Post n„o encontrado" };
             }
 
             if (post.authorId.toString() !== userId) {
               set.status = 403;
-              return { error: "Acesso negado: Voc√™ n√£o √© o autor deste post" };
+              return { error: "Acesso negado: VocÍ n„o È o autor deste post" };
             }
 
             if (body.image && body.image.length > 5 * 1024 * 1024) {
@@ -96,7 +95,7 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
               return { error: "Imagem muito grande: Limite de 5MB" };
             }
 
-            return PostService.update(id, body.title, body.content, body.image);
+            return await PostService.update(id, body.title, body.content, body.image);
           },
           {
             params: t.Object({
@@ -117,19 +116,19 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
             const payload = (await jwt.verify(token)) as any;
             const userId = payload.sub;
 
-            const post = PostService.getById(id);
+            const post = await PostService.getById(id);
 
             if (!post) {
               set.status = 404;
-              return { error: "Post n√£o encontrado" };
+              return { error: "Post n„o encontrado" };
             }
 
             if (post.authorId.toString() !== userId) {
               set.status = 403;
-              return { error: "Acesso negado: Voc√™ n√£o √© o autor deste post" };
+              return { error: "Acesso negado: VocÍ n„o È o autor deste post" };
             }
 
-            return PostService.delete(id);
+            return await PostService.delete(id);
           },
           {
             params: t.Object({
@@ -145,13 +144,13 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
             const payload = (await jwt.verify(token)) as any;
             const userId = payload.sub;
 
-            const post = PostService.getById(id);
+            const post = await PostService.getById(id);
             if (!post) {
               set.status = 404;
-              return { error: "Post n√£o encontrado" };
+              return { error: "Post n„o encontrado" };
             }
 
-            return PostService.toggleLike(id, userId);
+            return await PostService.toggleLike(id, userId);
           },
           {
             params: t.Object({
