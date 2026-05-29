@@ -14,7 +14,7 @@ function Like({ post }: LikeProps) {
   const isLiked = likedPosts[post.id] ?? false;
 
   const [liked, setLiked] = useState<boolean>(isLiked);
-  const [likes, setLikes] = useState<number>(post.likesCount + (isLiked && accessToken ? 1 : 0));
+  const [likes, setLikes] = useState<number>(post.likesCount);
   const [likeError, setLikeError] = useState<boolean>(false);
 
     
@@ -31,7 +31,11 @@ function Like({ post }: LikeProps) {
     onSuccess: (data) => {
       setLiked(data.liked);
       setPostLiked(post.id, data.liked);
-      setLikes(data.liked ? post.likesCount + 1 : post.likesCount);
+      if (typeof data.likesCount === 'number') {
+        setLikes(data.likesCount);
+      } else {
+        setLikes((prev) => data.liked ? prev + 1 : prev - 1);
+      }
     },
   });
 
